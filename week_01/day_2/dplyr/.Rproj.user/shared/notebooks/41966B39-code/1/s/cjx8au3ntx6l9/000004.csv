@@ -1,0 +1,2 @@
+"0","all_deaths %>% "
+"0","  mutate(death_later_than_average = year_of_death > avg_year_death)"

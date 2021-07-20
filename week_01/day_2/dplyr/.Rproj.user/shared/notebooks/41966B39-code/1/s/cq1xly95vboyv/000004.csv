@@ -1,0 +1,3 @@
+"0","avg_year_death <-"
+"0","all_deaths %>% "
+"0","  summarise(avg_year_death = mean(year_of_death, na.rm = TRUE))"

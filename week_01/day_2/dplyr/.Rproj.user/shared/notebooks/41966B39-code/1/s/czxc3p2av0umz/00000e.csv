@@ -1,0 +1,2 @@
+"0","play_all_deaths <- tibble::rowid_to_column(all_deaths, ""ID"")"
+"0","filter(play_all_deaths, book_intro_chapter == max(ID%%6*6,6)+4) "

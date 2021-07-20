@@ -1,0 +1,8 @@
+"0","state_income_data %>% "
+"0","  select(Index:Y2008) %>% "
+"0","  rename(first_letter = Index) %>% "
+"0","  filter(first_letter %in% c(""A"", ""B"", ""C"")) %>% "
+"0","  mutate(income_change = Y2008 - Y2002) %>% "
+"0"," # filter(Y2008 == max(Y2008))"
+"0"," # filter(abs(income_change) > 500000)"
+"0","  summarise(avg = mean(income_change), median = median(income_change))"
