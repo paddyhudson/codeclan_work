@@ -1,0 +1,105 @@
+---
+title: "Recode"
+output: html_notebook
+---
+```{r}
+library(tidyverse)
+library(CodeClanData)
+```
+
+#the if_else function
+```{r}
+students_big %>% 
+  select(ageyears) %>% 
+  mutate(older_than_12 = if_else(ageyears > 12, "Older than 12", "12 or younger"))
+  
+```
+
+```{r}
+students_big %>% 
+  select(gender) %>% 
+  mutate(gender = if_else(gender == "M", "Male", "Female"))
+```
+```{r}
+students_big %>% 
+  select(handed, favourite_physical_activity) %>% 
+  mutate(handed = if_else(handed == "R", "Right",
+                          if_else(handed == "L", "Left", "Both"))) %>% 
+  mutate(favourite_physical_activity = if_else(favourite_physical_activity == "Football/Soccer", "Football", favourite_physical_activity))
+  
+```
+#recode function
+
+```{r}
+students_big %>% 
+  select(travel_to_school) %>% 
+  mutate(travel_to_school = 
+           recode(travel_to_school,
+                  "Bus" = "bus",
+                  "Car" = "car", 
+                  "Walk" = "walk",
+                  .default = "other")) %>% 
+  group_by(travel_to_school) %>% 
+  summarise(count = n())
+```
+
+```{r}
+students_big %>% 
+  select(travel_to_school) %>% 
+  mutate(travel_to_school = str_to_lower(travel_to_school)) %>% 
+  group_by(travel_to_school) %>% 
+  summarise(count = n())
+
+```
+
+```{r}
+students_big %>% 
+  select(ageyears) %>% 
+  mutate(ageyears = recode(ageyears, "12" = 120, .default = 0))
+```
+
+```{r}
+students_big %>% 
+  select(favourite_physical_activity) %>% 
+  mutate(favourite_physical_activity = recode(favourite_physical_activity, "Football/Soccer" = "Football"))
+```
+```{r}
+data %>% 
+  mutate(subject = recode(subject, "1" = "001", "2" = "002", "3" = "003", "4" = "004")) %>% 
+  mutate(sex = recode(sex, "M" = "Male", "F" = "Female")) %>% 
+  mutate(compl = recode(compl, "T" = TRUE, "F" = FALSE, .default = NA))
+```
+```{r}
+students_big %>% 
+  select(ageyears) %>% 
+  mutate(age_divisible = case_when(
+    ageyears %% 2 == 0 ~ "Even",
+    ageyears %% 3 == 0 ~ "Divisible by 3",
+    ageyears %% 5 == 0 ~ "Divisible by 5",
+    TRUE ~ "Other numbers"
+  )) %>% 
+  distinct()
+```
+```{r}
+students_big %>%  
+    mutate(estimated_travel_time = case_when(
+    region == "London" ~ 60,
+    travel_to_school == "Walk" ~ 10,
+    travel_to_school == "Car" ~ 20,
+    TRUE ~ 30
+  ))
+```
+
+#slicing
+```{r}
+students_big %>% 
+#   slice(2:10)
+#    slice(c(2, 3, 5, 10:12))
+  group_by(region) %>% 
+  slice(1:5)
+```
+```{r}
+students_big %>% 
+  slice_max(height, n = 5)
+```
+

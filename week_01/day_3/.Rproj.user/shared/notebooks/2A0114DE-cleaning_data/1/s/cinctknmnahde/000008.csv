@@ -1,0 +1,2 @@
+"0","video_games <- video_games %>% "
+"0","  rename(customer_id = 'customer id')"

@@ -1,0 +1,4 @@
+"0","#replace NA observations in monthly_charges variable with median of column"
+"0","comms_data_imputed_median <- comms_data %>% "
+"0","  mutate(monthly_charges = coalesce(monthly_charges,"
+"0","                                    median(monthly_charges, na.rm = TRUE)))"

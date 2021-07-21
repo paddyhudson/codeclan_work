@@ -1,0 +1,13 @@
+"0","dog_bites <- read_csv(""data/dog_bites.csv"")"
+"1","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m--------------------------------------------------------------------------[39m
+cols(
+  DateOfBite = [31mcol_character()[39m,
+  Species = [31mcol_character()[39m,
+  Breed = [31mcol_character()[39m,
+  Age = [31mcol_character()[39m,
+  Gender = [31mcol_character()[39m,
+  SpayNeuter = [33mcol_logical()[39m
+)
+
+"

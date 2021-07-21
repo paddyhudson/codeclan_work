@@ -1,0 +1,2 @@
+"0","dir_create(""data/clean_data"")"
+"0","write_csv(students, ""data/clean_data/students.csv"")"

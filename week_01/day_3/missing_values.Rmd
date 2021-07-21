@@ -1,0 +1,62 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+```{r}
+library(tidyverse)
+```
+
+# load and explore data
+
+```{r}
+comms_data <- read_csv("data/telecom_data.csv")
+comms_data
+```
+
+#explore missing monthly charges
+```{r}
+comms_data %>% 
+  #filter(is.na(monthly_charges))
+  summarise(count = sum(is.na(monthly_charges)))
+```
+#option 1 - remove observations with missing data
+```{r}
+comms_data %>% 
+  drop_na()
+```
+
+#option 2 - impute
+```{r}
+#replace NA observations in monthly_charges variable with median of column
+comms_data_imputed_median <- comms_data %>% 
+  mutate(monthly_charges = coalesce(monthly_charges,
+                                    median(monthly_charges, na.rm = TRUE)))
+```
+```{r}
+#replace NA observations in monthly_charges variable with median of column
+comms_data_imputed_mean <- comms_data %>% 
+  mutate(monthly_charges = coalesce(monthly_charges,
+                                    mean(monthly_charges, na.rm = TRUE)))
+```
+```{r}
+comms_data %>% 
+  group_by(total_charges) %>% 
+  summarise(count = n())
+```
+```{r}
+comms_data %>% 
+  mutate(total_charges = na_if(total_charges, "na")) %>% 
+  filter(is.na(total_charges))
+
+```
+```{r}
+comms_data %>% 
+  mutate(total_charges = as.numeric(total_charges))
+```
+
+```{r}
+comms_data %>% 
+  mutate(payment_method = na_if(payment_method, "--")) %>% 
+  mutate(payment_method = coalesce(payment_method, "unavailable"))
+```
+
