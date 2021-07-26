@@ -1,0 +1,8 @@
+"0","past_customers <- tibble("
+"0","  custname = c(""Dave Brown"", ""Jess Bishop""),"
+"0","  customer_ID = c(020, 021),"
+"0","  email_address = c(""dbrown@hotmail.com"", ""jessb@gmail.com""),"
+"0","  shipping_address = c(""57 Park View, Leith"", ""12 Reid Way, Broxburn"")"
+"0",")"
+"0",""
+"0","bind_rows(customers, past_customers)"

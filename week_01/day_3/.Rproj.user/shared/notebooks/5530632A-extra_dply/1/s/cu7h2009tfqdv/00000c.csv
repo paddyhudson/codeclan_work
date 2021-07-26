@@ -1,0 +1,5 @@
+"0","prog_months_job_gender <- new_coders %>% "
+"0","  group_by(job_pref, gender) %>% "
+"0","  summarise(sum_months_prog = sum(months_programming), .groups = ""drop"")"
+"0","  "
+"0",""

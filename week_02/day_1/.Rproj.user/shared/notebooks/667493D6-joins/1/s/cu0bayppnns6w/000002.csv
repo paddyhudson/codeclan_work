@@ -1,0 +1,1 @@
+"0","right_join(customers, orders, by = ""customer_ID"")"

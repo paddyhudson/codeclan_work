@@ -1,0 +1,15 @@
+"0","library(tidyverse)"
+"0","country_data <- read_csv(""data/country_data.csv"")"
+"1","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m--------------------------------------------------------------------------[39m
+cols(
+  country = [31mcol_character()[39m,
+  type = [31mcol_character()[39m,
+  Y1999 = [32mcol_double()[39m,
+  Y2000 = [32mcol_double()[39m,
+  Y2001 = [32mcol_double()[39m,
+  code_letter = [31mcol_character()[39m,
+  code_numb = [32mcol_double()[39m
+)
+
+"

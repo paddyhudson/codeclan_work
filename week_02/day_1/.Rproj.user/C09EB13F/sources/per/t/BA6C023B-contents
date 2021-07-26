@@ -1,0 +1,92 @@
+---
+title: "Joins Lab"
+output: html_notebook
+---
+
+#1.1 read in data
+
+```{r}
+library(tidyverse)
+
+actors <- read_csv("data/actors.csv")
+movies <- read_csv("data/movies.csv")
+roles <- read_csv("data/roles.csv")
+```
+
+#1.2
+
+#actors: PK = id, FK = id
+#movies: PK = id, FK = id
+#roles: PK = role, FK = actor_id and movie_id
+
+#actors and roles: one to many
+#movies and roles: one to many
+#actors and movies: many to many
+
+#2
+
+```{r}
+#2.1 find id of interest
+current_id <- movies %>% 
+  filter(name == "Little Mermaid, The") %>% 
+  pull(id)
+
+#2.2 get The Little Mermaid roles 
+little_mermaid_roles <- roles %>% 
+  filter(movie_id == current_id)
+
+#2.3 get actors who appeared in The Little Mermaid using left join
+left_join(little_mermaid_roles, actors, by = c("actor_id" = "id"))
+
+#2.4 try inner join
+inner_join(actors, little_mermaid_roles, by = c("id" = "actor_id"))
+
+#results in 2.3 and 2.4 are the same because every role (left side of the join) has an associated actor
+#using inner_join you can have the arguments in either order, giving the same result
+```
+
+#3
+
+```{r}
+#find actors with more than one film, then join on roles and movies
+
+actors_more_than_once <- actors %>% 
+  filter(film_count > 1) %>% 
+  left_join(roles, by = c("id" = "actor_id")) %>% 
+  left_join(movies, by = c("movie_id" = "id"))
+
+#find each actor's average rating
+#create a new column containing the actor's full name (to read output easily)
+
+actors_ave_ratings <- actors_more_than_once %>%
+  unite(name, first_name:last_name, sep = " ") %>% 
+  group_by(id) %>%
+  summarise(name = name, ave_rating = mean(as.double(rank), na.rm = TRUE)) %>%
+  ungroup() %>% 
+  distinct()
+
+#get top five actors - keep ties
+
+top_five_actors <- slice_max(actors_ave_ratings, ave_rating, n = 5)
+
+```
+
+#4
+#Find the actor who has appeared in most films. List the films they appeared in,
+#the year the film was released and their role in the film.
+
+```{r}
+
+#find the most prolific actor and drop ties, just in case
+most_films <- actors %>% 
+  slice_max(film_count, n = 1, with_ties = FALSE) %>%
+#join on roles then movies
+  left_join(roles, by = c("id" = "actor_id")) %>% 
+  left_join(movies, by = c("movie_id" = "id")) %>%
+#create actor_name column
+  unite(act_name, first_name:last_name, sep = " ") %>% 
+#select desired information
+  select(act_name, name, year, role)
+
+```
+

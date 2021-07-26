@@ -1,0 +1,31 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+#load the data
+
+amount_spent <- c(9.1, 8.55, 14.32, 14.17, 14.34, 7.97, 9.79, 11.47, 12.44)
+meal_category <- c("Lunch", "Dinner", "Lunch", "Lunch", "Cinema", "Drinks",
+                  "Lunch", "Lunch", "Dinner")
+                  
+#combine data into tibble then check structure
+
+my_week_of_spending = tibble(
+                        amount_spent = amount_spent,
+                        spending_category = meal_category
+                        )
+str(my_week_of_spending)
+
+#summarise total spend and total lunch spend
+
+summarise(my_week_of_spending, sum(amount_spent))
+summarise(
+  filter(
+    my_week_of_spending,
+    spending_category == "Lunch"
+    ),
+    sum(amount_spent_lunch)
+  )
+```

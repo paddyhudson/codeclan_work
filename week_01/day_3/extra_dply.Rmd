@@ -1,0 +1,105 @@
+---
+title: "Extra dplyr"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+
+new_coders <- read_csv("data/new_coders.csv")
+```
+
+#group by with mutate
+
+```{r}
+new_coders_grp_avg <- new_coders %>% 
+  group_by(reasons_to_code) %>% 
+  mutate(
+    average_expected_earnings = mean(expected_earn),
+    diff_from_expected = expected_earn - average_expected_earnings
+    ) %>% 
+  ungroup()
+new_coders_grp_avg
+
+```
+```{r}
+new_coders_gender_age <- new_coders %>% 
+  group_by(gender) %>% 
+  mutate(
+    average_age_for_gender = mean(age)
+  ) %>% 
+ungroup ()
+new_coders_gender_age
+```
+
+#window functions - lag() and lead()
+
+```{r}
+chinesemeal %>% 
+  arrange(FoodType, Year) %>% 
+  group_by(FoodType) %>% 
+  mutate(
+    last_years_calories = lag(CaloriesPerDay),
+    calories_change = CaloriesPerDay - last_years_calories
+  ) %>% 
+ungroup()
+```
+```{r}
+chinesemeal %>% 
+  mutate(five_years_ago_calories = lag(CaloriesPerDay, 5))
+```
+
+#across columns
+]
+```{r}
+deaths <- read.csv("data/character-deaths.csv")
+
+deaths %>% 
+  mutate(across(book1_GoT:book5_DwD, as.logical)) %>% 
+  select(name, book1_GoT:book5_DwD)
+
+```
+```{r}
+deaths %>% 
+  group_by(allegiances) %>% 
+  summarise(across(book1_GoT:book5_DwD, sum)) %>% 
+  select(allegiances, book1_GoT:book5_DwD)
+```
+
+```{r}
+deaths %>% 
+  group_by(allegiances) %>%
+  across(book1_GoT:book5_DwD, sum) %>% 
+  select(allegiances, book1_GoT:book5_DwD)
+```
+#with()
+
+```{r}
+
+
+deaths  %>% 
+  group_by(allegiances) %>% 
+  summarise(across(where(is.numeric), ~mean(., na.rm = TRUE)))
+```
+
+```{r}
+
+new_coders %>% 
+  mutate(across(where(is.character), as.factor))
+```
+
+```{r}
+new_coders %>% 
+  select_if(is.character)
+```
+
+#group by multiple variables
+
+```{r}
+prog_months_job_gender <- new_coders %>% 
+  group_by(job_pref, gender) %>% 
+  summarise(sum_months_prog = sum(months_programming), .groups = "drop")
+  
+
+```
+

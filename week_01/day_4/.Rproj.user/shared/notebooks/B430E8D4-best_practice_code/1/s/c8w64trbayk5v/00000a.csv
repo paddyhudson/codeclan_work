@@ -1,0 +1,7 @@
+"0","summarise("
+"0","  filter("
+"0","    my_week_of_spending,"
+"0","    spending_category == ""Lunch"""
+"0","    ),"
+"0","    sum(amount_spent)"
+"0","  )"

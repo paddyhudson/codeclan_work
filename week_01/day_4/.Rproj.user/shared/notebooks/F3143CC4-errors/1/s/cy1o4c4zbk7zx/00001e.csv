@@ -1,0 +1,3 @@
+"0","tibble(alphabet = LETTERS,"
+"0","       numbers = 1:26) %>% "
+"0","  filter(!(alphabet %in% c('A', 'B', 'C')))"

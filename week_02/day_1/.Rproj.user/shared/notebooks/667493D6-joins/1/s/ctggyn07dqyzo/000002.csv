@@ -1,0 +1,4 @@
+"0","customers2 <- customers %>% "
+"0","  mutate(payment_type = c(""card"", ""cash"", ""cash"", ""card"", ""card"", ""card""))"
+"0","orders2 <- orders %>%"
+"0","  mutate(payment_type = c(""card"", ""cash"", ""cash"", ""card"", ""card"", ""cash""))"

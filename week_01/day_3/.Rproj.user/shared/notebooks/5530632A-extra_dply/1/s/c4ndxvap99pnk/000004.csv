@@ -1,0 +1,6 @@
+"0","deaths %>% "
+"0","  group_by(allegiances) %>%"
+"0","  across(book1_GoT:book5_DwD, sum) %>% "
+"0","  select(allegiances, book1_GoT:book5_DwD)"
+"2","Error in across_setup({ : object 'book1_GoT' not found
+"

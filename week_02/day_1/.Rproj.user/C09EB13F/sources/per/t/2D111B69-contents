@@ -1,0 +1,34 @@
+---
+title: "Tidy Data Lab"
+output: html_notebook
+---
+
+#load libraries and read in data
+
+```{r}
+library(tidyverse)
+country_data <- read_csv("data/country_data.csv")
+```
+#country needs the first three characters trimmed
+#Y1999:Y2001 needs to be put into a column (longer)
+#type needs to be put across two rows (wider)
+
+```{r}
+tidy_country_data <-country_data %>%
+  pivot_longer(
+    cols = Y1999:Y2001,
+    names_to = "year",
+    values_to = "count"
+  ) %>% 
+  pivot_wider(
+    names_from = type,
+    values_from = count
+  ) %>% 
+  unite(
+    col = "code",
+    c(code_letter, code_numb),
+    sep = ""
+    ) %>% 
+  mutate(country = str_replace(country, "\\d\\. ", ""))
+```
+

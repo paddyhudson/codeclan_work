@@ -1,0 +1,6 @@
+"0","income %>% "
+"0","  pivot_longer("
+"0","    cols = starts_with(""x""),"
+"0","    names_to = ""salary"","
+"0","    values_to = ""count"""
+"0","  )"

@@ -1,0 +1,1 @@
+"0","inner_join(customers2, orders2, by = c(""customer_ID"", ""payment_type""))"
