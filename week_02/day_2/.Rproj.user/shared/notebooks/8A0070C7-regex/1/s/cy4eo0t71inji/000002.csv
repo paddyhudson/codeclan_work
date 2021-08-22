@@ -1,0 +1,8 @@
+"0",""
+"0","pattern <- ""a"""
+"0",""
+"0","str_detect(single_string, pattern)"
+"1","[1]"
+"1"," TRUE"
+"1","
+"

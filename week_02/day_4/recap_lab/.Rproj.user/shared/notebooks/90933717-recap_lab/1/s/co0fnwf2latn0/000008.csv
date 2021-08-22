@@ -1,0 +1,6 @@
+"0","diet_comp_clean <- diets %>% "
+"0","  pivot_longer("
+"0","    ends_with(""2017""),"
+"0","    names_to = ""kcal_source"","
+"0","    values_to = ""avg_daily_kcals"""
+"0","  )"

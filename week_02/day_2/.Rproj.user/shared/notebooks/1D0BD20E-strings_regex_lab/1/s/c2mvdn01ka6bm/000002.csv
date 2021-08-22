@@ -1,0 +1,8 @@
+"0","pattern <- ""Julia"""
+"0",""
+"0","whole_text %>% "
+"0","  str_detect(pattern)"
+"1","[1]"
+"1"," FALSE"
+"1","
+"

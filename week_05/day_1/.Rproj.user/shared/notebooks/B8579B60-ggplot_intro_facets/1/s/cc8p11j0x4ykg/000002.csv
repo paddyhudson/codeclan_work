@@ -1,0 +1,2 @@
+"0","ggplot(count_data) +"
+"0","  geom_col(aes(x = superpower, y = counts, fill = school_year))"

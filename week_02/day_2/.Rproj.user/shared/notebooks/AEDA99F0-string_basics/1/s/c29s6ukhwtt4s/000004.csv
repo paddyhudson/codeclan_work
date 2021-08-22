@@ -1,0 +1,2 @@
+"0","employees %>% "
+"0","  mutate(name_place = str_c(first_name, location, sep = ""_""))"

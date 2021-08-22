@@ -1,0 +1,32 @@
+---
+title: "Control Flow"
+output: html_notebook
+---
+
+
+```{r}
+
+x <- 6
+
+if (x %% 2 == 0) {
+  print("Yes that divides by two")
+}
+  
+```
+```{r}
+if (10 != 5) {
+  if (3 > 1) {
+    print("hello")
+  }
+  print("goodbye")
+}
+```
+
+```{r}
+my_vector <- 1:5
+
+for (i in my_vector) {
+  print(i)
+}
+```
+

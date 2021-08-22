@@ -1,0 +1,210 @@
+---
+title: "ggplot Intro"
+output: html_notebook
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+library(tidyverse)
+students <- read.csv("data/students.csv")
+```
+
+```{r}
+ggplot(students) +
+  aes(x = superpower) +
+  geom_bar()
+```
+```{r}
+ggplot(students) +
+  geom_bar(aes(x = superpower), fill = "light blue")
+```
+
+```{r}
+ggplot(students) +
+  geom_bar(aes(x = superpower), fill = "light blue", colour = "red")
+```
+
+```{r}
+ggplot(students) +
+  geom_bar(aes(x = superpower, fill = school_year))
+```
+
+```{r}
+ggplot(students) + 
+  geom_bar(aes(x = superpower, fill = school_year), position = "dodge")
+```
+
+```{r}
+ggplot(students) + 
+  geom_bar(aes(x = superpower, fill = school_year), position = "fill")
+```
+
+```{r}
+count_data <- students %>% 
+  group_by(superpower, school_year) %>% 
+  summarise(counts = n())
+```
+```{r}
+ggplot(count_data) +
+  geom_bar(aes(x = superpower, y = counts, fill = school_year), stat = "identity")
+```
+
+```{r}
+ggplot(count_data) +
+  geom_col(aes(x = superpower, y = counts, fill = school_year))
+```
+```{r}
+ggplot(count_data) +
+  geom_bar(aes(x = superpower, y = counts, fill = school_year), stat = "identity")
+```
+
+```{r}
+ggplot(students) +
+  geom_bar(aes(x = superpower, fill = school_year), stat = "count")
+```
+```{r}
+ggplot(students) +
+  geom_bar(aes(x = superpower, fill = school_year)) +
+  labs(
+    x = "\nSuperpower",
+    y = "Count",
+    title = "Preferred Superpower by School Year",
+    subtitle = "Data from students around the world\n",
+    fill = "School Year"
+  )
+```
+
+```{r}
+ggplot(students) +
+  geom_bar(aes(x = superpower, fill = school_year)) +
+  xlab("\nSuperpower") +
+  ylab("Count") +
+  title("Preferred Superpower by School Year",
+        sub = "Data from students around the world\n") +
+  labs(fill = "School Year")
+```
+
+```{r}
+olympic_overall_medals <- read_csv("data/olympics_overall_medals.csv")
+
+top_10 <- olympic_overall_medals %>% 
+  filter(season == "Summer", medal == "Gold") %>% 
+  arrange(desc(count)) %>% 
+  top_n(10)
+
+```
+
+```{r}
+ggplot(top_10) +
+  geom_col(aes(x = team, y = count, fill = team), show.legend = FALSE) +
+  labs(
+    x = "\nTeam",
+    y = "Gold Medal Count",
+    title = "Historic Total Gold Medal Count at Summer Olympics",
+    subtitle = "Highest Achieving Ten Teams\n"
+  )
+```
+
+```{r}
+library(janitor)
+chick_weight <- clean_names(ChickWeight)
+```
+
+```{r}
+ggplot(chick_weight) +
+  geom_line(aes(x = time, y = weight, group = chick, colour = diet),
+            alpha = 0.25) +
+  geom_point(aes(x = time, y = weight, colour = diet),
+             alpha = 0.5) +
+  geom_smooth(aes(x = time, y = weight, colour = diet))
+```
+
+```{r}
+ggplot(chick_weight) +
+  aes(x = time, y = weight, colour = diet) +
+  geom_line(aes(group = chick), alpha = 0.25) +
+  geom_point(alpha = 0.5) +
+  geom_smooth()
+```
+
+```{r}
+ggplot(chick_weight) +
+  aes(x = time, y = weight, colour = diet) +
+  geom_line(aes(group = chick), alpha = 0.25) +
+  geom_point(alpha = 0.5) +
+  geom_smooth()
+```
+
+
+#First Task
+```{r}
+ggplot(students) +
+  aes(x = height_cm, y = reaction_time, colour = superpower) +
+  geom_point()
+```
+
+#Second Task
+```{r}
+pets <- read_csv("data/pets.csv")
+
+library(ggrepel)
+ggplot(pets) +
+  aes(x = age, y = weight, colour = sex, shape = animal, size = 4, label = name) +
+  geom_point() +
+  geom_label_repel() +
+  guides(size = "none") +
+  labs(
+    x = "\nAge",
+    y = "Weight\n",
+    title = "Pets Weight vs Age\n"
+  )
+```
+
+```{r}
+ggsave("pets.pdf")
+```
+
+```{r}
+ggplot(chick_weight) +
+  aes(x = time, y = weight, colour = diet, group = chick) +
+  geom_line() +
+  facet_wrap(~diet, ncol = 4)
+```
+
+```{r}
+benefits <- read_csv("data/benefits.csv")
+
+ggplot(benefits) +
+  geom_histogram(aes(x = age, col = "white", fill = sex)) +
+  facet_wrap(~sex)
+```
+
+```{r}
+ggplot(benefits) +
+  aes(x = age, fill = sex) +
+  geom_histogram(col = "white") +
+  facet_wrap(married ~ sex)
+```
+
+```{r}
+ggplot(benefits) +
+  aes(x = age, fill = sex) +
+  geom_histogram(col = "white") +
+  facet_grid(married ~ sex)
+```
+
+```{r}
+ggplot(benefits) +
+  aes(x = age, fill = sex) +
+  geom_histogram(col = "white") +
+  facet_grid(married ~ dkids, labeller = label_both)
+```
+
+```{r}
+ggplot(benefits) +
+  aes(x = age, fill = sex) +
+  geom_histogram(col = "white") +
+  facet_wrap(~sex, ncol = 2, scales = "free_y")
+  
+```

@@ -1,0 +1,6 @@
+"0","unmatched_countries <- diet_comp_clean %>% "
+"0","  inner_join(codes, by = c(""code"" = ""alpha_3_code"")) %>%"
+"0","  mutate(code_comparison = str_sub(code, 1, 2) == alpha_2_code) %>% "
+"0","  distinct(country.x, .keep_all = TRUE) %>% "
+"0","  filter(country.x != country.y) %>% "
+"0","  select(country.x, country.y)"

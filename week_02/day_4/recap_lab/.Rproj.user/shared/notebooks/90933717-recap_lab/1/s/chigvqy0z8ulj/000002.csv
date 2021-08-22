@@ -1,0 +1,2 @@
+"0","diet_comp_clean %>% "
+"0","  summarise(across(.fns = ~ sum(is.na(.x))))"

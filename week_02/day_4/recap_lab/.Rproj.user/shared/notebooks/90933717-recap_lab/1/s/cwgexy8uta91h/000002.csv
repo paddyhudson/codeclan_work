@@ -1,0 +1,4 @@
+"0","diet_comp_clean %>% "
+"0","  inner_join(codes, by = ""country"") %>% "
+"0","  mutate(code_comparison = str_sub(code, 1, 2) == alpha_2_code) %>% "
+"0","  distinct(country, .keep_all = TRUE)"

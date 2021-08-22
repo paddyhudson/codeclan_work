@@ -1,0 +1,198 @@
+---
+title: "Recap Lab"
+output: html_notebook
+---
+
+#load libraries and load data
+
+```{r}
+library(tidyverse)
+library(janitor)
+
+diets <- read.csv("data/dietary-composition-by-country.csv") %>%  clean_names()
+```
+
+```{r}
+diets %>% 
+  glimpse()
+
+names(diets)
+```
+
+#Q2 lengthen the data
+
+```{r}
+diet_comp_clean <- diets %>% 
+  pivot_longer(
+    ends_with("2017"),
+    names_to = "kcal_source",
+    values_to = "avg_daily_kcals"
+  )
+```
+
+#Q3 clean data (names already cleaned in Q1 using clean_names())
+#replace missing values with NA
+
+```{r}
+diet_comp_clean <- diet_comp_clean %>% 
+  mutate(kcal_source = str_sub(kcal_source, end = -10)) %>% 
+  rename(country = entity) %>% 
+  mutate(across(everything(), ~ na_if(.x, "")))
+```
+
+#Q4 count NA in each col
+#you have to name the .fns argument
+
+```{r}
+diet_comp_clean %>% 
+  summarise(across(.fns = ~ sum(is.na(.x))))
+```
+
+#Q5
+#Get countries which have missing codes, into a vector
+
+```{r}
+missing_codes <- diet_comp_clean %>% 
+  filter(is.na(code)) %>% 
+  distinct(country) %>% 
+  pull()
+```
+
+#then see whether other rows have these countries' codes
+#apparently these codes aren't to be found anywhere in this dataset
+
+```{r}
+diet_comp_clean %>% 
+  filter(
+    !is.na(code) & 
+    (country == missing_codes[1] | country == missing_codes[2])
+    ) %>% 
+  head(n = 2)
+```
+
+#Q6
+#read in the codes data
+
+```{r}
+codes <- read_csv("data/country_codes.csv") %>% clean_names()
+
+codes %>% 
+  filter(country == missing_codes[1] | country == missing_codes[2])
+
+#this hasn't worked, because the text strings don't match
+#so we'll do it manually - CPV and USA
+```
+
+#Q7 recode the missing data
+#don't forget to leave the existing codes untouched...
+#Check again for NA values
+
+```{r}
+diet_comp_clean <- diet_comp_clean %>%
+  mutate(code = case_when(
+    country == "United States of America" ~ "USA",
+    country == "Cabo Verde" ~ "CPV",
+    TRUE ~ code
+    )
+  )
+
+diet_comp_clean %>% 
+  filter(is.na(code))
+
+```
+
+#Q8 join the two datasets, keeping only the matches
+#add a new column to flag whether the first two char of code matches alpha_2_code
+#put it through a distinct call for easier interpretation of the outcome
+
+```{r}
+unmatched_countries <- diet_comp_clean %>% 
+  inner_join(codes, by = c("code" = "alpha_3_code")) %>%
+  mutate(code_comparison = str_sub(code, 1, 2) == alpha_2_code) %>% 
+  distinct(country.x, .keep_all = TRUE) %>% 
+  filter(country.x != country.y) %>% 
+  select(country.x, country.y)
+```
+
+```{r}
+diet_comp_clean %>% 
+  inner_join(codes, by = "country") %>% 
+  mutate(code_comparison = str_sub(code, 1, 2) == alpha_2_code) %>% 
+  distinct(country, .keep_all = TRUE)
+```
+
+#Q9 Filter UK data into a new tibble and drop NA values in avg_daily_kcals col
+
+```{r}
+uk_diet <- diet_comp_clean %>% 
+  filter(code == "GBR") %>% 
+  drop_na(avg_daily_kcals)
+```
+
+#Q10 create a new column containing the difference from previous year's calories
+#pull out the most positive and most negative changes
+#have to drop NAs in order for max()/min() to work
+
+```{r}
+uk_diet %>% 
+  group_by(year) %>% 
+  summarise(total_kcals = sum(avg_daily_kcals)) %>% 
+  mutate(cal_diff = total_kcals - lag(total_kcals)) %>%
+  drop_na(cal_diff) %>% 
+  filter(cal_diff == max(cal_diff) | cal_diff == min(cal_diff))
+```
+
+#Q11 From 1990 to 2000, find the country with the most avg_dail_kcals
+#from alcohol each year
+#Assuming question wants 1990 and 2000 included
+
+```{r}
+diet_comp_clean %>% 
+  filter(
+    kcal_source == "alcoholic_beverages" &
+    year >= 1990 &
+    year <= 2000
+  ) %>% 
+  group_by(year) %>% 
+  slice_max(avg_daily_kcals, n = 1)
+```
+
+#Q12 write a function which finds the top calorie source for a user-specified
+#vector of both countries and years
+
+```{r}
+top_calorie_source <- function(search_country, search_year){
+  diet_comp_clean %>% 
+    filter(country == search_country & year == search_year) %>% 
+    slice_max(avg_daily_kcals, n=1) %>% 
+    pull(kcal_source) -> top_source
+    print(str_c("Top calorie source for ", search_country, " in ", search_year, " was ", top_source))
+}
+
+
+
+vtop_calorie_source <- Vectorize(top_calorie_source)
+
+```
+
+#Use the function to do the specified searches
+
+```{r}
+
+
+vsearch_country <- c("United Kingdom", "Zimbabwe")
+vsearch_year <- c(1965, 1965, 1975, 1975, 1985, 1985, 1995, 1995, 2005, 2005)
+
+vtop_calorie_source(vsearch_country, vsearch_year)
+```
+
+```{r}
+a <- as.integer(1)
+b <- as.double(1)
+
+is.numeric(a)
+is.numeric(b)
+is.double(a)
+is.double(b)
+```
+

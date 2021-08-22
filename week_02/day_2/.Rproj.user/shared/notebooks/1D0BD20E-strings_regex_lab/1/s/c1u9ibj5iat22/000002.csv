@@ -1,0 +1,4 @@
+"0","pattern <- ""(Winston|Smith)"""
+"0",""
+"0","working_text <- whole_text %>% "
+"0","  str_replace_all(pattern, ""REDACTED"")"

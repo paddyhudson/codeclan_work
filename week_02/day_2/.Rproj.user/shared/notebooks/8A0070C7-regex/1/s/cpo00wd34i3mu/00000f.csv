@@ -1,0 +1,6 @@
+"0","pattern <- ""[_a-z0-9\\.]+@[a-z\\.]+"""
+"0",""
+"0","strings %>% "
+"0","  str_extract_all(pattern) %>% "
+"0","  tibble() %>% "
+"0","  unnest(cols = c(.))"

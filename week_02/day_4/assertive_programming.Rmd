@@ -1,0 +1,66 @@
+---
+title: "Assertive Programming"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(assertr)
+
+weather_one <- read_csv("data/delhi_weather_one.csv")
+```
+
+
+```{r}
+weather_report <- function(weather) {
+  
+  #base::stopifnot
+  stopifnot(
+    nrow(weather) > 15,
+    ncol(weather) == 4,
+    drop_na(weather) == weather
+  )
+
+  #do data checks with assertr::verify
+  
+  weather %>% 
+    verify(temp >= -35 & temp <= 55) %>% 
+    verify(wind_speed >= 0 & wind_speed <= 108) %>% 
+    verify(humidity >= 0 &  humidity <= 100)
+  
+  #get means
+  
+  weather_means <- weather %>% 
+    summarise(
+      mean_temp = mean(temp),
+      mean_humidity = mean(humidity),
+      mean_wind_speed = mean(wind_speed)
+    )
+  
+  #show hot and humid days
+  
+  hot_and_humid <- weather %>% 
+    filter(temp > 20,
+           humidity > 55)
+  
+  return(list(weather_means, hot_and_humid))
+}
+```
+
+```{r}
+weather_report(weather_one)
+
+```
+
+```{r}
+weather_two <- read_csv("data/delhi_weather_two.csv")
+```
+
+```{r}
+weather_report(weather_two)
+```
+
+```{r}
+stopifnot()
+```
+

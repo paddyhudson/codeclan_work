@@ -1,0 +1,119 @@
+---
+title: "Effective Plots"
+output: html_notebook
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+total_sales <- read_csv("data/total_sales.csv")
+```
+
+```{r}
+total_sales %>% 
+  ggplot() +
+  aes(x = reorder(branch, -sales), y = sales) +
+  geom_col() +
+  coord_flip()
+```
+
+Highlighting
+
+```{r}
+total_sales %>% 
+  ggplot() + 
+  aes(x = branch, y = sales, fill = sales == max(sales)) +
+  geom_col(show.legend = FALSE) +
+  scale_fill_manual(values = c("red", "gray40")) +
+  coord_flip()
+```
+
+Annotating
+
+```{r}
+total_sales %>% 
+  mutate(label_text = ifelse(branch == "Leeds", "715k sales", NA)) %>% 
+  ggplot() + 
+  aes(x = branch, y = sales, fill = sales == max(sales)) +
+  geom_col(show.legend = FALSE) +
+  scale_fill_manual(values = c("red", "gray40")) +
+  coord_flip() +
+  geom_text(aes(label = label_text, colour = "gray40"))
+
+```
+
+```{r}
+monthly_sales <- read_csv("data/monthly_sales.csv") %>%
+  mutate(month = factor(month, levels = c("Jan", "Feb", "March", "April"))) 
+
+head(monthly_sales)
+```
+
+```{r}
+monthly_sales %>% 
+  filter(month == "April") %>% 
+  ggplot() +
+  aes(x = branch,
+      y = difference_from_jan,
+      fill = case_when(
+        difference_from_jan == max(difference_from_jan) ~ "green",
+        difference_from_jan == min(difference_from_jan) ~ "red",
+        TRUE ~ "gray40"
+        )) +
+  geom_col(show.legend = FALSE) +
+  scale_fill_identity() +
+  coord_flip()
+```
+```{r}
+ggplot(monthly_sales) +
+  aes(x = reorder(branch, difference_from_jan), y = difference_from_jan) +
+  geom_col() +
+  coord_flip() +
+  # scale_colour_gradient(low = "gray0", high = "gray100") +
+  labs(
+    title = "Difference in branch sales between January and April",
+    y = "Sales: January vs April (000s)",
+    x = "Branch"
+  )
+```
+
+```{r}
+ggplot(monthly_sales) +
+  aes(x = branch, y = sales, fill = month) +
+  geom_col(position = "dodge") +
+  coord_flip()
+
+ggplot(monthly_sales) +
+  aes(x = month, y = sales, group = branch, colour = branch) +
+  geom_line() 
+```
+
+
+```{r}
+monthly_sales %>% 
+  mutate(northern = ifelse(
+    branch %in% c("Edinburgh", "Leeds", "Glasgow", "Manchester"), TRUE, FALSE)
+    ) %>%
+  ggplot() +
+  aes(x = month,
+      y = sales,
+      group = northern,
+      fill = northern) +
+  geom_col(show.legend = FALSE, position = "dodge")
+```
+
+```{r}
+monthly_sales %>% 
+  filter(month == "April") %>% 
+  ggplot() +
+  aes(x = branch,
+      y = difference_from_jan,
+      fill = ifelse(difference_from_jan == max(difference_from_jan), "1", "2")) +
+  geom_col(show.legend = FALSE) +
+  scale_fill_manual(values = c("gray40", "green", "red")) +
+  coord_flip()
+```

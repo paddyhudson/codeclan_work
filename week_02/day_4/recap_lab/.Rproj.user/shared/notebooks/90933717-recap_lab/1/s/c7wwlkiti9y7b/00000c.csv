@@ -1,0 +1,4 @@
+"0","diet_comp_clean <- diet_comp_clean %>% "
+"0","  mutate(kcal_source = str_sub(kcal_source, end = -10)) %>% "
+"0","  rename(country = entity) %>% "
+"0","  mutate(across(everything(), ~ na_if(.x, """")))"

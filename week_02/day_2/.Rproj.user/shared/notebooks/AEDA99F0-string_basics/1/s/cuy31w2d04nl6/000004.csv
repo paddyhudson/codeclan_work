@@ -1,0 +1,3 @@
+"0","employees %>% "
+"0","  mutate(pc_inner = str_sub(postcode, -3)) %>% "
+"0","  mutate(pc_outer = str_sub(postcode, 1, -5))"

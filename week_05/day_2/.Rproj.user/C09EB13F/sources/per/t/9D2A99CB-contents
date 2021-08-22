@@ -1,0 +1,180 @@
+---
+title: "Right Chart Lab"
+output: html_notebook
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+theme <- 
+  theme(
+    text = element_text(size = 12),
+    title = element_text(size = 14),
+    axis.text = element_text(size = 10),
+    panel.background = element_rect(fill = "white"),
+    panel.grid = element_line(colour = "grey90", linetype = "dashed")
+  )
+
+colour_scheme <- c('#7fc97f','#beaed4','#fdc086','#ffff99','#386cb0','#f0027f','#bf5b17','#666666')
+```
+
+#3.1
+```{r}
+late_deliveries <- read_csv("data/late_deliveries.csv")
+recovery_times <- read_csv("data/recovery_times.csv")
+fitness_levels <- read_csv("data/fitness_levels.csv")
+```
+
+```{r}
+late_deliveries %>% 
+  ggplot() +
+  aes(x = date, y = late_deliveries) +
+  geom_line()
+```
+
+```{r}
+recovery_times %>% 
+  ggplot() +
+  aes(x = reorder(prognosis, recovery), y = recovery, fill = treatment_group) +
+  geom_col(position = "dodge") +
+  coord_flip() +
+  scale_fill_manual(values = colour_scheme, name = "Group") +
+  theme +
+  labs(
+    x = "Prognosis",
+    y = "Recovery Time",
+    title = "Recovery Time Comparison Across Treatment Groups\n"
+  )
+```
+
+```{r}
+fitness_levels %>%
+  group_by(group, age) %>% 
+  mutate(mean_group_score = mean(fitness_score)) %>%
+  mutate(group = as_factor(group)) %>% 
+  ggplot() +
+  aes(x = age, y = mean_group_score, group = group, colour = group) +
+  geom_line() +
+  theme +
+  scale_color_manual(values = colour_scheme, name = "Group") +
+  labs(
+    x = "Age",
+    y = "Mean Group Fitness Score",
+    title = "Fitness vs Age\n"
+  )
+```
+
+#3.2
+```{r}
+blood_pressure <- read_csv("data/blood_pressure.csv")
+car_use <- read_csv("data/car_use.csv")
+```
+
+```{r}
+blood_pressure %>% 
+  ggplot() +
+  aes(y = systolic_blood_pressure_mm_hg,
+      x = daily_saturated_fat_intake_mg
+      ) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme +
+  labs(
+    y = "Systolic BP /mmhg",
+    x = "Daily Sat Fat Intake /mg",
+    title = "BP vs Sat Fat Intake",
+    subtitle = "With Best Fit and Confidence Area"
+  )
+```
+
+```{r}
+car_use %>% 
+  ggplot() +
+  aes(y = air_so2_concentration_ppm,
+      x = car_use_percent * population
+      ) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme +
+  labs(
+    y = "SO2 Air Concentration /ppm\n",
+    x = "\n% Car Use x Population",
+    title = "SO2 Air Concentration vs Total Car Use",
+    subtitle = "With Best Fit and Confidence Area\n"
+  )
+```
+
+#3.3
+
+```{r}
+d20_outcomes <- read_csv("data/d20_outcomes.csv")
+d20x5_outcomes <- read_csv("data/d20x5_outcomes.csv")
+```
+
+```{r}
+d20_outcomes %>% 
+  ggplot() +
+  aes(x = outcome) +
+  geom_histogram(binwidth = 1, col = "white") +
+  theme +
+  labs(
+    y = "Outcome",
+    x = "Frequency",
+    title = "Outcome Frequency Distribution",
+    subtitle = "Bin Width = 1"
+  )
+```
+
+```{r}
+d20x5_outcomes %>% 
+  ggplot() +
+  aes(x = outcome) +
+  geom_histogram(binwidth = 5, col = "white") +
+  theme +
+  labs(
+    y = "Outcome",
+    x = "Frequency",
+    title = "Outcome Frequency Distribution",
+    subtitle = "Bin Width = 5"
+  )
+```
+
+#3.4
+```{r}
+pension_surplus <- read_csv("data/pension_surplus.csv")
+pension_liabilities <- read_csv("data/pension_liabilities.csv")
+```
+
+```{r}
+pension_surplus %>% 
+  mutate(sign = ifelse(sign == "positive", "Surplus", "Deficit")) %>% 
+  ggplot() + 
+  aes(x = sign, y = abs(balance), fill = item) +
+  geom_col() +
+  theme +
+  scale_fill_manual(values = colour_scheme, name = "Item") +
+  labs(
+    y = "Value",
+    x = NULL,
+    title = "Pension Surplus Items"
+  )
+```
+
+```{r}
+pension_liabilities %>% 
+  ggplot() +
+  aes(x = year, y = liability_millions, fill = liability_type) +
+  geom_area() +
+  theme +
+  scale_fill_manual(values = colour_scheme, name = "Item") +
+  labs(
+    y = "Value",
+    x = "Year",
+    title = "Pension Liabilities over Time"
+  )
+```
+

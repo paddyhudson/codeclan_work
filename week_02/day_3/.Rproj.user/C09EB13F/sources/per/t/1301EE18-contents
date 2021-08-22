@@ -1,0 +1,20 @@
+---
+title: "Functions"
+output: html_notebook
+---
+
+```{r}
+make_price <- function(x) {
+  if ((is.numeric(x)) & (round(x) == x)) {
+    return(str_c("£", x))
+  } else {
+    return("Not a valid input")
+  }
+  
+}
+
+make_price(243)
+make_price("71s")
+make_price(412.3)
+```
+

@@ -1,0 +1,70 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(shiny)
+library(leaflet)
+library(CodeClanData)
+```
+
+```{r}
+
+```
+
+```{r}
+ui <- fluidPage(
+  
+  selectInput("region",
+              "Which Region?",
+              choices = unique(whisky$Region)),
+  
+  leafletOutput("map")
+)
+
+server <- function(input, output) {
+  
+  output$map <- renderLeaflet(whisky %>%
+    filter(Region == input$region) %>% 
+    leaflet() %>% 
+    addTiles() %>% 
+    addCircleMarkers(lng = ~Latitude, lat = ~Longitude, popup = ~Distillery)
+  )
+}
+
+shinyApp(ui, server)
+```
+
+```{r}
+library(tidyverse)
+library(shiny)
+
+students_big <- students_big
+
+ui <- fluidPage(
+  sliderInput("sample_size", "Sample Size", value = 50, min = 1, max = 912),
+  plotOutput("histogram")
+)
+
+server <- function(input, output) {
+  
+  sampled_data <- reactive({
+    students_big %>%
+      select(height) %>% 
+      sample_n(input$sample_size) 
+  })
+  
+  output$histogram <- renderPlot({
+    
+    ggplot(sampled_data()) +
+      aes(x = height) +
+      geom_histogram()
+    
+  })
+}
+
+shinyApp(ui, server)
+```
+

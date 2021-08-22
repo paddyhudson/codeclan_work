@@ -1,0 +1,23 @@
+"0","pattern <- ""([a-z]+_)+[a-z]+""
+
+
+my_vector %>% 
+  str_replace(pattern, ""Paddy"") %>% 
+  str_replace(pattern, ""Glasgow"")
+"
+"1","[1]"
+"1"," ""Colin's mobile number definitely isn't 07777777777.""                     "
+"1","
+"
+"1","[2]"
+"1"," ""A landline might be 01010 123456.""                                       "
+"1","
+"
+"1","[3]"
+"1"," ""Mhairi, Del, Aileen and Steph have been some of your instructors so far."""
+"1","
+"
+"1","[4]"
+"1"," ""I'm called Paddy and I live in Glasgow.""                                 "
+"1","
+"

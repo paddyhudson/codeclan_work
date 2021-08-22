@@ -1,0 +1,3 @@
+"0","employees %>% "
+"0","  group_by(location) %>% "
+"0","  summarise(n())"

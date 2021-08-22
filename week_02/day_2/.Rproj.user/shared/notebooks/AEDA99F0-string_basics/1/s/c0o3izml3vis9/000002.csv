@@ -1,0 +1,8 @@
+"0","pangram <- ""The quick brown fox jumps over the lazy dog"""
+"0",""
+"0","pangram %>% "
+"0","  str_to_upper()"
+"1","[1]"
+"1"," ""THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG"""
+"1","
+"

@@ -1,0 +1,5 @@
+"0","student_info <- list("
+"0","  ""Agnes Smith"" = list(height = 1.8, shoe_size = 8),"
+"0","  Bobby = list(height = 2.1, gender = ""MALE""),"
+"0","  Charlie = list(gender = ""MALE"", likes_beets = TRUE)"
+"0",")"

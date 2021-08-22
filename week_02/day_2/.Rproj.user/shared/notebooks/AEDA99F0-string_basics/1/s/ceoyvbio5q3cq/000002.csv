@@ -1,0 +1,30 @@
+"0","spotify_songs <- read_csv(""data/spotify_sample.csv"")"
+"2","Warning:"
+"2"," Missing column names filled in: 'X1' [1]
+"
+"2","Warning:"
+"2"," Duplicated column names deduplicated: 'X1' => 'X1_1' [2]
+"
+"1","
+[36m--[39m [1m[1mColumn specification[1m[22m [36m-------------------------------------------------------------------------[39m
+cols(
+  .default = col_double(),
+  track_id = [31mcol_character()[39m,
+  track_name = [31mcol_character()[39m,
+  track_artist = [31mcol_character()[39m,
+  track_album_id = [31mcol_character()[39m,
+  track_album_name = [31mcol_character()[39m,
+  track_album_release_date = [31mcol_character()[39m,
+  playlist_name = [31mcol_character()[39m,
+  playlist_id = [31mcol_character()[39m,
+  playlist_genre = [31mcol_character()[39m,
+  playlist_subgenre = [31mcol_character()[39m
+)
+[36mi[39m Use [38;5;235m[48;5;253m[38;5;235m[48;5;253m`spec()`[48;5;253m[38;5;235m[49m[39m for the full column specifications.
+
+"
+"0","spotify_songs %>% "
+"0","  mutate(playlist_name = str_to_upper(playlist_name)) %>% "
+"0","  mutate(track_artist_lowcase = str_to_lower(track_artist)) %>% "
+"0","  mutate(playlist_start = str_sub(playlist_id, start = 1, end = 5)) %>% "
+"0","  mutate(year = str_sub(track_album_release_date, start = 1, end = 4))"

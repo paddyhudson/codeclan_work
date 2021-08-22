@@ -1,0 +1,135 @@
+---
+title: "String Basics"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(janitor)
+```
+
+```{r}
+single_quote_string <- 'This is a single quote string'
+double_quote_string <- "John's bag"
+mixed_string <- "If I use a single quote inside double quotes it'll be fine, though."
+escaped_string <- 'I won\'t have any problems if I escape using a backslash before the quote.'
+```
+
+```{r}
+employees <- tibble(
+  first_name = c("Sally", "steven", "Mary", "John"),
+  last_name = c("Smith", "hasTings", "Milne", "Davidson"),
+  postcode = c("EH10 6GH", "EH3 7HL", "G1 7FR", NA), 
+  location = c(" ", "Edinburgh", "", "Stirling")
+)
+```
+
+```{r}
+employees %>% 
+  group_by(location) %>% 
+  summarise(n())
+```
+
+```{r}
+mary_location <- employees %>% 
+  filter(first_name == "Mary") %>% 
+  select(location) %>% 
+  pull()
+
+sally_location <- employees %>% 
+  filter(first_name == "Sally") %>% 
+  select(location) %>% 
+  pull()
+
+mary_location == sally_location
+```
+#join strings (concatenate)
+
+```{r}
+
+str_c("This", "is", "some", "text", sep = " ")
+```
+```{r}
+employees %>% 
+  mutate(full_name = str_c(first_name, last_name, sep = " "))
+```
+
+```{r}
+employees %>% 
+  mutate(name_place = str_c(first_name, location, sep = "_"))
+```
+
+```{r}
+pangram <- "The quick brown fox jumps over the lazy dog"
+
+pangram %>% 
+  str_to_upper()
+```
+```{r}
+employees %>% 
+  mutate(across(1:2, ~ str_to_sentence(.)))
+```
+```{r}
+unbroken_string <- "We're going to split this string up"
+
+unbroken_string %>% 
+  str_split("") %>% 
+  flatten_chr()
+```
+```{r}
+employees %>% 
+  #mutate(postcode_new = str_split(postcode, " ")) %>% 
+  separate(postcode, c("pc_1", "pc_2"), " ")
+```
+
+```{r}
+my_string <- str_c("Manipulating", "strings", "is", "fun!", sep = " ")
+
+my_string_cap <- str_to_upper(my_string) %>% 
+  str_split("") %>% 
+  flatten_chr()
+```
+
+#finding substrings
+
+```{r}
+full_string <- "Let's grab a substring from this!"
+
+full_string %>%
+  str_sub(start = 1, end = 5)
+```
+```{r}
+full_string <- "Let's grab a substring from this!"
+
+full_string %>%
+  str_sub(start = -5)
+```
+```{r}
+employees %>% 
+  mutate(pc_inner = str_sub(postcode, -3)) %>% 
+  mutate(pc_outer = str_sub(postcode, 1, -5))
+```
+```{r}
+#original_string <- "We're going to replace some words"
+
+employees %>% 
+mutate(postcode = (str_sub(postcode, 1, 3) <- "I've changed"))
+```
+
+```{r}
+number <- 123456.789
+
+format(number, nsmall = 3, big.mark = " ", decimal.mark = ",")
+
+```
+
+```{r}
+spotify_songs <- read_csv("data/spotify_sample.csv")
+
+spotify_songs %>% 
+  mutate(playlist_name = str_to_upper(playlist_name)) %>% 
+  mutate(track_artist_lowcase = str_to_lower(track_artist)) %>% 
+  mutate(playlist_start = str_sub(playlist_id, start = 1, end = 5)) %>% 
+  mutate(year = str_sub(track_album_release_date, start = 1, end = 4))
+```
+

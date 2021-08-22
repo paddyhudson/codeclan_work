@@ -1,0 +1,4 @@
+"0","#original_string <- ""We're going to replace some words"""
+"0",""
+"0","employees %>% "
+"0","mutate(postcode = (str_sub(postcode, 1, 3) <- ""I've changed""))"

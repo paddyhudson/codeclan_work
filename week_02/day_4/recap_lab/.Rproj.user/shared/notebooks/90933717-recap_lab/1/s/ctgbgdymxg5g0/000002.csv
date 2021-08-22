@@ -1,0 +1,3 @@
+"0","uk_diet <- diet_comp_clean %>% "
+"0","  filter(code == ""GBR"") %>% "
+"0","  drop_na(avg_daily_kcals)"

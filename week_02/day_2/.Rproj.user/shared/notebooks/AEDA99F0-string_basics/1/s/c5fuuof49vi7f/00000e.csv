@@ -1,0 +1,3 @@
+"0","employees %>% "
+"0","  #mutate(postcode_new = str_split(postcode, "" "")) %>% "
+"0","  separate(postcode, c(""pc_1"", ""pc_2""), "" "")"

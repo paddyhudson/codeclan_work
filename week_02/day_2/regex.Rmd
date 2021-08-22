@@ -1,0 +1,168 @@
+---
+title: "regex"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+
+single_string <- "string a"
+strings <- c("string a", "string b", "string c", "string d", "striiiiiiing e")
+```
+
+#Matching Patterns in Text
+
+```{r}
+
+pattern <- "a"
+
+str_detect(single_string, pattern)
+```
+```{r}
+strings %>% 
+  str_detect(pattern)
+```
+```{r}
+pattern <- "[a-zA-Z]"
+
+strings %>% 
+  str_detect(pattern)
+```
+#number of instances
+
+```{r}
+pattern <- "i{3}"
+
+strings %>% 
+  str_detect(pattern)
+```
+
+```{r}
+#create vector
+
+my_vector <- c("We're having great fun learning about data analysis at CodeClan!", "CodeClan is at 37 Castle Terrace in Edinburgh, ClockWise in Glasgow, and Wasps Academy in Inverness", "Our cohort code starts with DE, DG or D", "You get a great view of the castle or the national conservatoire from just outside CodeClan's door")
+
+#match CodeClan
+
+my_vector %>% 
+  str_detect("CodeClan")
+
+#match two consecutive caps
+
+my_vector %>% 
+  str_detect("[A-Z]{2}")
+
+#try both negate arg and ! to match strings not containing castle or Castle
+
+my_vector %>% 
+  str_detect("castle|Castle", negate = TRUE)
+
+#this doesn't work
+my_vector %>% 
+  !str_detect("castle|Castle")
+
+#this does
+!str_detect(my_vector, "castle|Castle")
+```
+
+```{r}
+
+my_tibble <- tibble(my_vector) %>% 
+  filter(!str_detect(my_vector, "castle|Castle"))
+
+my_tibble
+```
+
+```{r}
+my_vector %>% 
+  str_detect("((?i)c)astle", negate = TRUE)
+```
+#extracting matching substrings
+
+```{r}
+strings <- c(
+  "This string has an_address@email.com in it", 
+  "This one has user.name@company.co.uk", 
+  "Now we've got other_person_123@server.net and my.name@runningoutofideas.com"
+)
+```
+
+```{r}
+pattern <- "[a-z]@"
+
+strings %>% 
+  str_extract_all(pattern)
+  
+  
+  #tibble() %>% 
+  #unnest()
+```
+# "*" 0 or more occurences
+# "+" 1 or more occurences
+# {i} exactly i occurences
+
+```{r}
+string <- "@emailprovider.com"
+pattern <- "[a-z]*@emailprovider.com"
+
+string %>% 
+  str_extract(pattern)
+```
+
+```{r}
+pattern <- "[a-z0-9]+@"
+
+strings %>% 
+  str_extract(pattern)
+```
+
+```{r}
+pattern <- "[_a-z0-9\\.]+@[a-z\\.]+"
+
+strings %>% 
+  str_extract(pattern)
+```
+```{r}
+pattern <- "[_a-z0-9\\.]+@[a-z\\.]+"
+
+strings %>% 
+  str_extract_all(pattern) %>% 
+  tibble() %>% 
+  unnest(cols = c(.))
+```
+```{r}
+pattern <- "[_a-z0-9\\.]+@[a-z\\.]+"
+
+strings %>% 
+  str_replace_all(pattern, "REDACTED")
+```
+```{r}
+my_vector <- c("Colin's mobile number definitely isn't 07777777777.", "A landline might be 01010 123456.", "Mhairi, Del, Aileen and Steph have been some of your instructors so far.", "I'm called your_name_here and I live in your_town_here.")
+
+#extract all names - try out unnest function which needs a tibble
+
+pattern <- "[A-Z][a-z]+"
+
+my_vector %>% 
+  str_extract_all(pattern) %>%
+  tibble() %>% 
+  unnest(cols = c(.))
+
+#extract landline numbers
+
+pattern <- "[0-9]+ [0-9]+"
+
+my_vector %>% 
+  str_extract(pattern)
+
+#insert my name and where I live
+
+pattern <- "([a-z]+_)+[a-z]+"
+
+
+my_vector %>% 
+  str_replace(pattern, "Paddy") %>% 
+  str_replace(pattern, "Glasgow")
+
+```
+

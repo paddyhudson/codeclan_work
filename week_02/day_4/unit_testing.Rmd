@@ -1,0 +1,66 @@
+---
+title: "Unit Testing"
+output: html_notebook
+---
+
+```{r}
+is_leap_year <- function(year){
+  
+  #add condition to make sure function only takes numeric input
+  
+  if(!is.numeric(year)) {
+    stop("Non-numeric input :(")
+  }
+  
+  if (year %% 100 == 0){
+    if (year %% 400 == 0){
+      return(TRUE)
+    } else{
+      return(FALSE)
+    }
+  }
+  
+  if (year %% 4 == 0){
+    return(TRUE)
+  } else{
+    return(FALSE)
+  }
+  
+}
+```
+
+#Unit testing with testthat
+
+```{r}
+library(testthat)
+
+test_that("Real Leap Years return TRUE", {
+  expect_equal(is_leap_year(2020), TRUE)
+  expect_equal(is_leap_year(2000), TRUE)
+})
+
+# second test : one expectation
+
+test_that("Character input returns an error", {
+  expect_error(is_leap_year("year"))
+})
+
+
+```
+#tests that fail
+
+```{r}
+
+test_that("Non-numeric input returns an error", {
+  expect_error(is_leap_year("year"))
+  expect_error(is_leap_year(TRUE))
+})
+```
+#task - test non-leap-year
+```{r}
+test_that("Non-leap-year returns falst", {
+  expect_equal(is_leap_year(1900), FALSE)
+  expect_equal(is_leap_year(2017), FALSE)
+})
+```
+

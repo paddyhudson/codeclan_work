@@ -1,0 +1,79 @@
+---
+title: "Colours and Themes"
+output: html_notebook
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+library(tidyverse)
+```
+```{r}
+pets <- read_csv("data/pets.csv")
+```
+
+```{r}
+ggplot(pets) +
+  aes(x = weight, y = age) +
+  geom_point(colour = "steelblue")
+```
+
+
+#Sequential colour scheme
+```{r}
+ggplot(pets) +
+  aes(x = weight, y = age, colour = sleep) +
+  geom_point() +
+  scale_colour_gradient(low = "gray0", high = "gray100")
+```
+
+#Diverging Colour Scheme
+```{r}
+ggplot(pets) +
+  aes(x = weight, y = age, colour = sleep) +
+  geom_point() +
+  scale_colour_gradient2(low = "blue", mid = "white", high = "red", midpoint = 15)
+```
+
+```{r}
+students <- read_csv("data/students.csv")
+```
+
+```{r}
+students <- students %>% 
+  mutate(school_year = factor(school_year, levels = c("Year 7", "Year 8", "Year 9", "Year 10",
+                                                      "Year 11", "Year 12")))
+```
+
+```{r}
+ggplot(students) +
+  aes(x = school_year, fill = superpower) +
+  geom_bar() +
+  scale_fill_brewer(palette = "Dark2")
+```
+
+```{r}
+students <- students %>% 
+  mutate(school_year = as.integer(str_sub(school_year, start = 6)))
+```
+
+```{r}
+ggplot(students) +
+  aes(x = favorite_school_subject)+
+  geom_bar() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r}
+scottish_exports = read_csv("data/scottish_exports.csv")
+```
+
+```{r}
+ggplot(scottish_exports) +
+  geom_line(aes(x = year, y = exports, colour = sector), show.legend = FALSE) +
+  facet_wrap(~sector, scales = 'free_y') +
+  xlab("\n Year") +
+  ylab("Exports\n") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
